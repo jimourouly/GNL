@@ -16,6 +16,22 @@
 #include <unistd.h>
 #include <stdio.h>
 
+void ft_strcpy(t_node *head, char *buff)
+{
+    int i;
+    int j;
+
+    i = 0;
+    j = 0;
+
+    while(buff[i] && head->node_buff[j])
+    {
+        head->node_buff[j] = buff[i];
+        j++;
+        i++;
+    }
+}
+
 void ft_onfreetoutca(t_node **head, t_node *new_node, char *buff)
 {
 	t_node	*temp;
@@ -115,7 +131,7 @@ void	ft_node_insert_to_end(t_node **head, char *buff)
 	{
 		lastnode->next = newnode;
 	}
-	newnode->node_buff = buff;
+    ft_strcpy(newnode, buff);
 	newnode->next = NULL;
 
 }
@@ -218,12 +234,9 @@ void ft_cleaning(t_node **head)
 		i++;
 	}
 	buff[k] = '\0';
-	new_node->node_buff = buff;
+    ft_strcpy(new_node, buff);
 	new_node->next = NULL;
 	ft_onfreetoutca(head, new_node,buff);
-
-
-
 }
 
 char *get_next_line(int fd)
