@@ -54,6 +54,8 @@ void ft_onfreetoutca(t_node **head, t_node *new_node, char *buff)
 	{
 		free(buff);
 		free(new_node);
+        buff = NULL;
+        new_node = NULL;
 	}
 }
 
@@ -152,6 +154,7 @@ void	ft_create_list(t_node **head, int fd)
 		if (!char_read)
 		{
 			free (buff);
+            buff = NULL;
 			return;
 		}
 		buff[char_read] = '\0';
@@ -269,12 +272,18 @@ int main (void)
 	char *str;
 	int nbrline;
 
+    nbrline = 0;
 	filename = "file.txt";
 	fd = open(filename, O_RDONLY);
-	
+	if(fd < 0)
+    {
+        perror("error");
+        return (1);
+    }
 	while (str != get_next_line(fd))
 	{
 		printf("%d -> %s\n", nbrline, str);
+        free(str);
 		nbrline ++;
 	}
 }
