@@ -21,10 +21,13 @@ int main(void)
         while(charread[k] != '\0')
         {
             if (!(charread[k] == '\n'))
-                printf("charread[%d] = :%c:\n", k, charread[k]);
+                printf("%c", charread[k]);
+            else
+            {
+                printf("\n");
+            }
             k++;
         }
-        read(fd, charread, count);
         i++;
 
     }
