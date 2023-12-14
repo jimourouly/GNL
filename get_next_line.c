@@ -238,7 +238,7 @@ void ft_cleaning(t_node **head)
 	}
 	buff[k] = '\0';
     ft_strcpy(new_node, buff);
-	new_node->next = NULL;
+t s	new_node->next = NULL;
 	ft_onfreetoutca(head, new_node,buff);
 }
 

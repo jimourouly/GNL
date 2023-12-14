@@ -7,6 +7,7 @@ int main(void)
     size_t count;
     int k;
     int i;
+    int j;
     
     
     i = 0;
@@ -17,14 +18,15 @@ int main(void)
     while(i < BUFFER_SIZE)
     {
         k = 0;
-        read(fd, charread, count);
-        while(charread[k] != '\0')
+        j = read(fd, charread, count);
+        while(charread[k] != '\0' && !(j==0))
         {
             if (!(charread[k] == '\n'))
                 printf("%c", charread[k]);
             else
             {
-                printf("\n");
+                printf("%d \n",j);
+
             }
             k++;
         }
