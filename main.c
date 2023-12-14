@@ -1,34 +1,31 @@
-#include <unistd.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <stdlib.h>
-
-typedef struct s_node
-{
-    char    node_buffer[6];
-    struct s_node *next;
-}t_node;
+#include "main.h"
 
 int main(void)
 {
     int fd;
     char *charread;
     size_t count;
-    int BUFFER_SIZE;
+    int k;
     int i;
-
-
+    
+    
     i = 0;
-    BUFFER_SIZE = 42;
 
-    count = 5;
+    count = BUFFER_SIZE;
     charread = malloc(BUFFER_SIZE + 1);
     fd = open("file.txt", O_RDONLY);
-
-    while(i < 10)
+    while(i < BUFFER_SIZE)
     {
-        read(fd, charread, count); 
-        printf("%s", charread);
-        i ++;
+        k = 0;
+        read(fd, charread, count);
+        while(charread[k] != '\0')
+        {
+            if (!(charread[k] == '\n'))
+                printf("charread[%d] = :%c:\n", k, charread[k]);
+            k++;
+        }
+        read(fd, charread, count);
+        i++;
+
     }
 }
