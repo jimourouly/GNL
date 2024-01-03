@@ -2,7 +2,7 @@
 # define MAIN_H
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 12
+#  define BUFFER_SIZE 100
 # endif
 
 # include <unistd.h>
