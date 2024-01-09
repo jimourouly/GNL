@@ -3,6 +3,7 @@
 //return last node
 t_list	*ft_find_last_node(t_list *head)
 {
+	printf("FT_FIND_LAST_NODE\n");
 	if (head == NULL)
 		return (NULL);
 	while (head->next != NULL)
@@ -13,6 +14,7 @@ t_list	*ft_find_last_node(t_list *head)
 //return 1 if new line is found
 int	ft_new_line(t_list *head)
 {
+	printf("FT_NEW_LINE\n");
 	int		i;
 	t_list	*temp;
 
@@ -32,6 +34,7 @@ int	ft_new_line(t_list *head)
 //calculate char in line and malloc for the right size
 void	create_line(char **line, t_list *node)
 {
+	printf("CREATE_LINE\n");
 	int	i;
 	int	len;
 
@@ -41,6 +44,7 @@ void	create_line(char **line, t_list *node)
 		i = 0;
 		while (node->content[i])
 		{
+			printf("\n---------\nnode->content[%d] = :%c:\n", i, node->content[i]);
 			if (node->content[i] == '\n')
 			{
 				len ++;
@@ -48,15 +52,18 @@ void	create_line(char **line, t_list *node)
 			}
 			len ++;
 			i++;
+			printf("\n i=:%d:\t len=:%d:\n------", i, len);
 		}
 		node = node->next;
 	}
 	*line = malloc(sizeof(char) * (len + 1));
+	printf("\n line=:%s:", *line);
 }
 
 //free all my linked list
 void	free_node(t_list *node)
 {
+	printf("FREE_NODE\n");
 	t_list	*current;
 	t_list	*next;
 
@@ -73,6 +80,7 @@ void	free_node(t_list *node)
 //return how long is a char
 int	ft_strlen(char *str)
 {
+	printf("FT_STRLEN\n");
 	int	i;
 
 	i = 0;

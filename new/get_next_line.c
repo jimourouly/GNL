@@ -2,6 +2,7 @@
 
 char	*get_next_line(int fd)
 {
+	printf("GET_NEXT_LINE\n");
 	static t_list	*node;
 	char			*line;
 
@@ -27,6 +28,7 @@ char	*get_next_line(int fd)
 //copy char in linkedlist
 void	read_add_to_node(int fd, t_list **node)
 {
+	printf("READ_ADD_TO_NODE\n");
 	char	*buffer;
 	int		byteread;
 
@@ -51,6 +53,7 @@ void	read_add_to_node(int fd, t_list **node)
 //add whats in my buffer into linked list node
 void	add_to_node(t_list **node, char *buffer, int byteread)
 {
+	printf("ADD_TO_NODE\n");
 	int		i;
 	t_list	*lastnode;
 	t_list	*newnode;
@@ -81,6 +84,7 @@ void	add_to_node(t_list **node, char *buffer, int byteread)
 //copy char from node and store them in line
 void	read_line(t_list *node, char **line)
 {
+	printf("READ_LINE\n");
 	int	i;
 	int	j;
 
@@ -101,20 +105,17 @@ void	read_line(t_list *node, char **line)
 				j ++;
 				break ;
 			}
-			(*line)[j] = node->content[i];
-			i++;
-			j++;
+			(*line)[j++] = node->content[i++];
 		}
 		node = node->next;
 	}
-	//printf("J=:%d:",j);
-	//printf("I=:%d:",i);
 	(*line[j] = '\0');
 }
 
 //clean already read characteres, keep the unread char
 void	clean_node(t_list **node)
 {
+	printf("CLEAN_NODE\n");
 	t_list	*last;
 	t_list	*temp;
 	int		i;
@@ -127,19 +128,19 @@ void	clean_node(t_list **node)
 	last = ft_find_last_node(*node);
 	i = 0;
 	while (last->content[i] && last->content[i] != '\n')
+	{
+		printf("_____________\nlast->content[%d] = :%c:\n____________\n", i, last->content[i]);
 		i++;
+	}
 	if (last->content && last->content[i] == '\n')
 		i++;
 	temp->content = malloc(sizeof(char) * ((ft_strlen(last->content) - i) + 1));
 	if (temp->content == NULL)
 		return ;
 	j = 0;
+	printf("\t\tlast->content = :%s:\n", last->content);
 	while (last->content[i])
-	{
-		temp->content[j] = last->content[i];
-		j++;
-		i++;
-	}
+		temp->content[j++] = last->content[i++];
 	temp->content[j] = '\0';
 	free_node(*node);
 	*node = temp;
