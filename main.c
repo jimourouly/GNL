@@ -1,36 +1,23 @@
-#include "main.h"
+#include "get_next_line.h"
 
 int main(void)
 {
-    int fd;
-    char *charread;
-    size_t count;
-    int k;
-    int i;
-    int j;
-    
-    
-    i = 0;
+    int     fd;
+    char    *line;
 
-    count = BUFFER_SIZE;
-    charread = malloc(BUFFER_SIZE + 1);
+	printf("%d _BUFFER \n", BUFFER_SIZE);
+
     fd = open("file.txt", O_RDONLY);
-    while(i < BUFFER_SIZE)
-    {
-        k = 0;
-        j = read(fd, charread, count);
-        while(charread[k] != '\0' && !(j==0))
-        {
-            if (!(charread[k] == '\n'))
-                printf("%c", charread[k]);
-            else
-            {
-                printf("%d \n",j);
+    if (fd < 0)
+        return (0);
+   while(1)
+   {
 
-            }
-            k++;
-        }
-        i++;
-
-    }
+        line = get_next_line(fd);
+		printf("%s", line);
+        if (line == NULL)
+           break;
+        free (line);
+   }
+    return (0);
 }
