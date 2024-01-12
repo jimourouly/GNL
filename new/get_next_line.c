@@ -4,22 +4,25 @@ char	*get_next_line(int fd)
 {
 	static t_list	*node;
 	char			*line;
-	int 			i;
+	int				i;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &line, 0) < 0)
+	if (read(fd, &line, 0) < 0 || fd < 0 || BUFFER_SIZE <= 0)
+	{
+		free_node(node);
+		node = NULL;
 		return (NULL);
+	}
 	line = NULL;
 	read_add_to_node(fd, &node);
 	if (node == NULL)
 		return (NULL);
 	read_line(node, &line);
-	i = clean_node(&node);
-	if (line[0] == '\0' || (i == 0))
+	i = clean_node(&node, 0, 0);
+	if (line == NULL || line[0] == '\0' || (i == 0))
 	{
 		free_node(node);
-		node = NULL;
 		free(line);
-		free(node);
+		node = NULL;
 		return (NULL);
 	}
 	return (line);
@@ -29,7 +32,7 @@ char	*get_next_line(int fd)
 void	read_add_to_node(int fd, t_list **node)
 {
 	char	*buffer;
-	int		byteread;
+	ssize_t	byteread;
 
 	byteread = 1;
 	while (!ft_new_line(*node) && byteread != 0)
@@ -38,11 +41,11 @@ void	read_add_to_node(int fd, t_list **node)
 		if (buffer == NULL)
 			return ;
 		byteread = (int)read(fd, buffer, BUFFER_SIZE);
-		if(byteread == -1)
-			free(node);
-		if ((*node == NULL && byteread == 0))
+		if (*node == NULL && byteread <= 0)
 		{
-			free(*node);
+			byteread = 0;
+			free(buffer);
+			free_node(*node);
 			return ;
 		}
 		buffer[byteread] = '\0';
@@ -111,27 +114,27 @@ void	read_line(t_list *node, char **line)
 }
 
 //clean already read characteres, keep the unread char
-int	clean_node(t_list **node)
+int	clean_node(t_list **node, int i, int j)
 {
 	t_list	*last;
 	t_list	*temp;
-	int		i;
-	int		j;
 
 	temp = malloc(sizeof(t_list));
+	if (node == NULL || temp == NULL)
+		free(temp);
 	if (node == NULL || temp == NULL)
 		return (0);
 	temp->next = NULL;
 	last = ft_find_last_node(*node);
-	i = 0;
 	while (last->content[i] && last->content[i] != '\n')
 		i++;
 	if (last->content[i] && last->content[i] == '\n')
 		i++;
-	temp->content = malloc(sizeof(char) * ((ft_strlen(last->content) - 1) + 1));
+	temp->content = malloc(sizeof(char) * ((ft_strlen(last->content) - i) + 1));
+	if (temp->content == NULL)
+		free(temp);
 	if (temp->content == NULL)
 		return (0);
-	j = 0;
 	while (last->content[i])
 		temp->content[j++] = last->content[i++];
 	temp->content[j] = '\0';

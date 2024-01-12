@@ -27,6 +27,6 @@ int		ft_strlen(const char *str);
 void	read_add_to_node(int fd, t_list **node);
 void	add_to_node(t_list **node, char *buffer, int byteread);
 void	read_line(t_list *node, char **line);
-int		clean_node(t_list **node);
+int		clean_node(t_list **node, int i, int j);
 
 #endif
