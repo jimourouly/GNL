@@ -12,21 +12,21 @@
 
 char	*get_next_line(int fd);
 
-typedef struct s_list{
-	char			*content;
-	struct s_list	*next;
-}t_list;
+typedef struct s_list_char{
+	char				*content;
+	struct s_list_char	*next;
+}t_list_char;
 
 char	*get_next_line(int fd);
 
-t_list	*ft_find_last_node(t_list *head);
-int		ft_new_line(t_list *head);
-void	create_line(char **line, t_list *node);
-void	free_node(t_list *node);
-int		ft_strlen(const char *str);
-void	read_add_to_node(int fd, t_list **node);
-void	add_to_node(t_list **node, char *buffer, int byteread);
-void	read_line(t_list *node, char **line);
-int		clean_node(t_list **node, int i, int j);
+t_list_char	*ft_find_last_node(t_list_char *head);
+int		ft_new_line(t_list_char *head);
+void	create_line(char **line, t_list_char *node);
+void	free_node(t_list_char *node);
+int		ft_strlen_int(const char *str);
+void	read_add_to_node(int fd, t_list_char **node);
+void	add_to_node(t_list_char **node, char *buffer, int byteread);
+void	read_line(t_list_char *node, char **line);
+int		clean_node(t_list_char **node, int i, int j);
 
 #endif

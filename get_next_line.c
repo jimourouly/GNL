@@ -2,7 +2,7 @@
 
 char	*get_next_line(int fd)
 {
-	static t_list	*node;
+	static t_list_char	*node;
 	char			*line;
 	int				i;
 
@@ -29,7 +29,7 @@ char	*get_next_line(int fd)
 }
 
 //read file and add the content to buffer
-void	read_add_to_node(int fd, t_list **node)
+void	read_add_to_node(int fd, t_list_char **node)
 {
 	char	*buffer;
 	ssize_t	byteread;
@@ -55,13 +55,13 @@ void	read_add_to_node(int fd, t_list **node)
 }
 
 //add whats in my buffer into last nod
-void	add_to_node(t_list **node, char *buffer, int byteread)
+void	add_to_node(t_list_char **node, char *buffer, int byteread)
 {
 	int		i;
-	t_list	*lastnode;
-	t_list	*newnode;
+	t_list_char	*lastnode;
+	t_list_char	*newnode;
 
-	newnode = malloc(sizeof(t_list));
+	newnode = malloc(sizeof(t_list_char));
 	if (newnode == NULL)
 		return ;
 	newnode->next = NULL;
@@ -85,7 +85,7 @@ void	add_to_node(t_list **node, char *buffer, int byteread)
 }
 
 //copy char from node and store them in line
-void	read_line(t_list *node, char **line)
+void	read_line(t_list_char *node, char **line)
 {
 	int	i;
 	int	j;
@@ -114,12 +114,12 @@ void	read_line(t_list *node, char **line)
 }
 
 //clean already read characteres, keep the unread char
-int	clean_node(t_list **node, int i, int j)
+int	clean_node(t_list_char **node, int i, int j)
 {
-	t_list	*last;
-	t_list	*temp;
+	t_list_char	*last;
+	t_list_char	*temp;
 
-	temp = malloc(sizeof(t_list));
+	temp = malloc(sizeof(t_list_char));
 	if (node == NULL || temp == NULL)
 		free(temp);
 	if (node == NULL || temp == NULL)
@@ -130,7 +130,7 @@ int	clean_node(t_list **node, int i, int j)
 		i++;
 	if (last->content[i] && last->content[i] == '\n')
 		i++;
-	temp->content = malloc(sizeof(char) * ((ft_strlen(last->content) - i) + 1));
+	temp->content = malloc(sizeof(char) * ((ft_strlen_int(last->content) - i) + 1));
 	if (temp->content == NULL)
 		free(temp);
 	if (temp->content == NULL)

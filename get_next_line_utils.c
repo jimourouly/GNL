@@ -1,9 +1,9 @@
 #include "get_next_line.h"
 
 //return last node
-t_list	*ft_find_last_node(t_list *head)
+t_list_char	*ft_find_last_node(t_list_char *head)
 {
-	t_list	*current;
+	t_list_char	*current;
 
 	current = head;
 	while (current && current->next)
@@ -14,10 +14,10 @@ t_list	*ft_find_last_node(t_list *head)
 }
 
 //return 1 if new line is found
-int	ft_new_line(t_list *head)
+int	ft_new_line(t_list_char *head)
 {
 	int		i;
-	t_list	*temp;
+	t_list_char	*temp;
 
 	if (head == NULL)
 		return (0);
@@ -33,7 +33,7 @@ int	ft_new_line(t_list *head)
 }
 
 //calculate char in line and malloc for the right size
-void	create_line(char **line, t_list *node)
+void	create_line(char **line, t_list_char *node)
 {
 	int	i;
 	int	len;
@@ -58,10 +58,10 @@ void	create_line(char **line, t_list *node)
 }
 
 //free all my linked list
-void	free_node(t_list *node)
+void	free_node(t_list_char *node)
 {
-	t_list	*current;
-	t_list	*next;
+	t_list_char	*current;
+	t_list_char	*next;
 
 	current = node;
 	while (current)
