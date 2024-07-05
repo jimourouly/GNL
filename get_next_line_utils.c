@@ -74,7 +74,7 @@ void	free_node(t_list_char *node)
 }
 
 //return how long is a char
-int	ft_strlen(const char *str)
+int	ft_strlen_int(const char *str)
 {
 	int	len;
 
