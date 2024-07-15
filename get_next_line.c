@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jroulet <jroulet@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/15 15:05:23 by jroulet           #+#    #+#             */
+/*   Updated: 2024/07/15 15:54:00 by jroulet          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
 char	*get_next_line(int fd)
 {
 	static t_list_char	*node;
-	char			*line;
-	int				i;
+	char				*line;
+	int					i;
 
 	if (read(fd, &line, 0) < 0 || fd < 0 || BUFFER_SIZE <= 0)
 	{
@@ -57,7 +69,7 @@ void	read_add_to_node(int fd, t_list_char **node)
 //add whats in my buffer into last nod
 void	add_to_node(t_list_char **node, char *buffer, int byteread)
 {
-	int		i;
+	int			i;
 	t_list_char	*lastnode;
 	t_list_char	*newnode;
 
@@ -65,16 +77,16 @@ void	add_to_node(t_list_char **node, char *buffer, int byteread)
 	if (newnode == NULL)
 		return ;
 	newnode->next = NULL;
-	newnode->content = malloc(sizeof(char) * (byteread + 1));
-	if (newnode->content == NULL)
+	newnode->cont = malloc(sizeof(char) * (byteread + 1));
+	if (newnode->cont == NULL)
 		return ;
 	i = 0;
 	while (buffer[i] && i < byteread)
 	{
-		newnode->content[i] = buffer[i];
+		newnode->cont[i] = buffer[i];
 		i++;
 	}
-	newnode->content[i] = '\0';
+	newnode->cont[i] = '\0';
 	if (*node == NULL)
 	{
 		*node = newnode;
@@ -99,14 +111,14 @@ void	read_line(t_list_char *node, char **line)
 	while (node)
 	{
 		i = 0;
-		while (node->content[i])
+		while (node->cont[i])
 		{
-			if (node->content[i] == '\n')
+			if (node->cont[i] == '\n')
 			{
-				(*line)[j++] = node->content[i];
+				(*line)[j++] = node->cont[i];
 				break ;
 			}
-			(*line)[j++] = node->content[i++];
+			(*line)[j++] = node->cont[i++];
 		}
 		node = node->next;
 	}
@@ -126,18 +138,18 @@ int	clean_node(t_list_char **node, int i, int j)
 		return (0);
 	temp->next = NULL;
 	last = ft_find_last_node(*node);
-	while (last->content[i] && last->content[i] != '\n')
+	while (last->cont[i] && last->cont[i] != '\n')
 		i++;
-	if (last->content[i] && last->content[i] == '\n')
+	if (last->cont[i] && last->cont[i] == '\n')
 		i++;
-	temp->content = malloc(sizeof(char) * ((ft_strlen_int(last->content) - i) + 1));
-	if (temp->content == NULL)
+	temp->cont = malloc(sizeof(char) * ((ft_strlen_int(last->cont) - i) + 1));
+	if (temp->cont == NULL)
 		free(temp);
-	if (temp->content == NULL)
+	if (temp->cont == NULL)
 		return (0);
-	while (last->content[i])
-		temp->content[j++] = last->content[i++];
-	temp->content[j] = '\0';
+	while (last->cont[i])
+		temp->cont[j++] = last->cont[i++];
+	temp->cont[j] = '\0';
 	free_node(*node);
 	*node = temp;
 	return (1);

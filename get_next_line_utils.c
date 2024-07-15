@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jroulet <jroulet@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/15 15:09:46 by jroulet           #+#    #+#             */
+/*   Updated: 2024/07/15 15:54:24 by jroulet          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
 //return last node
@@ -16,16 +28,16 @@ t_list_char	*ft_find_last_node(t_list_char *head)
 //return 1 if new line is found
 int	ft_new_line(t_list_char *head)
 {
-	int		i;
+	int			i;
 	t_list_char	*temp;
 
 	if (head == NULL)
 		return (0);
 	temp = ft_find_last_node(head);
 	i = 0;
-	while (temp->content[i])
+	while (temp->cont[i])
 	{
-		if (temp->content[i] == '\n')
+		if (temp->cont[i] == '\n')
 			return (1);
 		i++;
 	}
@@ -42,9 +54,9 @@ void	create_line(char **line, t_list_char *node)
 	while (node)
 	{
 		i = 0;
-		while (node->content[i])
+		while (node->cont[i])
 		{
-			if (node->content[i] == '\n')
+			if (node->cont[i] == '\n')
 			{
 				len ++;
 				break ;
@@ -66,7 +78,7 @@ void	free_node(t_list_char *node)
 	current = node;
 	while (current)
 	{
-		free(current->content);
+		free(current->cont);
 		next = current->next;
 		free(current);
 		current = next;
