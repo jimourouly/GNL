@@ -6,7 +6,7 @@
 /*   By: jroulet <jroulet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:09:46 by jroulet           #+#    #+#             */
-/*   Updated: 2024/07/15 15:54:24 by jroulet          ###   ########.fr       */
+/*   Updated: 2024/08/11 14:30:39 by jroulet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ void	free_node(t_list_char *node)
 	t_list_char	*current;
 	t_list_char	*next;
 
+	if (node == NULL)
+		return ;
 	current = node;
 	while (current)
 	{

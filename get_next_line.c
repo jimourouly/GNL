@@ -6,7 +6,7 @@
 /*   By: jroulet <jroulet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:05:23 by jroulet           #+#    #+#             */
-/*   Updated: 2024/07/16 15:17:35 by jroulet          ###   ########.fr       */
+/*   Updated: 2024/08/11 14:40:20 by jroulet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,22 +131,22 @@ int	clean_node(t_list_char **node, int i, int j)
 	t_list_char	*last;
 	t_list_char	*temp;
 
-	temp = malloc(sizeof(t_list_char));
-	if (node == NULL || temp == NULL)
-		free(temp);
-	if (node == NULL || temp == NULL)
+	if (node == NULL)
 		return (0);
-	temp->next = NULL;
+	temp = malloc(sizeof(t_list_char));
+	if (temp == NULL)
+		return (0);
 	last = ft_find_last_node(*node);
 	while (last->cont[i] && last->cont[i] != '\n')
 		i++;
-	if (last->cont[i] && last->cont[i] == '\n')
+	if (last->cont[i] == '\n')
 		i++;
 	temp->cont = malloc(sizeof(char) * ((ft_strlen_int(last->cont) - i) + 1));
 	if (temp->cont == NULL)
+	{
 		free(temp);
-	if (temp->cont == NULL)
 		return (0);
+	}
 	while (last->cont[i])
 		temp->cont[j++] = last->cont[i++];
 	temp->cont[j] = '\0';
