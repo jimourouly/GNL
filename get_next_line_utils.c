@@ -6,7 +6,7 @@
 /*   By: jroulet <jroulet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:09:46 by jroulet           #+#    #+#             */
-/*   Updated: 2024/08/11 14:30:39 by jroulet          ###   ########.fr       */
+/*   Updated: 2024/08/19 18:04:58 by jroulet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ t_list_char	*ft_find_last_node(t_list_char *head)
 	t_list_char	*current;
 
 	current = head;
+	if (current == NULL)
+		return (NULL);
 	while (current && current->next)
 	{
 		current = current->next;

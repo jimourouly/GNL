@@ -6,7 +6,7 @@
 /*   By: jroulet <jroulet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:07:43 by jroulet           #+#    #+#             */
-/*   Updated: 2024/07/15 15:09:31 by jroulet          ###   ########.fr       */
+/*   Updated: 2024/08/19 18:23:36 by jroulet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include <stdbool.h>
 
 char		*get_next_line(int fd);
 
@@ -39,5 +40,6 @@ void		read_add_to_node(int fd, t_list_char **node);
 void		add_to_node(t_list_char **node, char *buffer, int byteread);
 void		read_line(t_list_char *node, char **line);
 int			clean_node(t_list_char **node, int i, int j);
+bool		ft_isonstr(const char *str, int ch);
 
 #endif

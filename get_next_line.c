@@ -5,152 +5,131 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jroulet <jroulet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/15 15:05:23 by jroulet           #+#    #+#             */
-/*   Updated: 2024/08/11 14:40:20 by jroulet          ###   ########.fr       */
+/*   Created: 2022/11/06 00:47:06 by nnuno-ca          #+#    #+#             */
+/*   Updated: 2024/08/19 18:21:29 by jroulet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdbool.h>
 
-char	*get_next_line(int fd)
+static char	*clean_printed(char	*global_buffer)
 {
-	static t_list_char	*node;
-	char				*line;
-	int					i;
+	size_t	i;
+	char	*new;
+	size_t	j;
 
-	if (read(fd, &line, 0) < 0 || fd < 0 || BUFFER_SIZE <= 0)
+	i = 0;
+	while (global_buffer[i] && global_buffer[i] != '\n')
+		i++;
+	if (!global_buffer[i])
 	{
-		free_node(node);
-		node = NULL;
+		free(global_buffer);
 		return (NULL);
 	}
-	line = NULL;
-	read_add_to_node(fd, &node);
-	if (node == NULL)
+	new = malloc(((ft_strlen_int(global_buffer) - i) + 1) * sizeof(char));
+	if (!new)
 		return (NULL);
-	read_line(node, &line);
-	i = clean_node(&node, 0, 0);
-	if (line == NULL || line[0] == '\0' || (i == 0))
+	i++;
+	j = 0;
+	while (global_buffer[i])
+		new[j++] = global_buffer[i++];
+	new[j] = '\0';
+	free(global_buffer);
+	return (new);
+}
+
+static char	*get_line(char *global_buffer)
+{
+	size_t	len;
+	size_t	i;
+	char	*line;
+
+	len = 0;
+	i = 0;
+	if (!global_buffer[i])
+		return (NULL);
+	while (global_buffer[len] && global_buffer[len] != '\n')
+		len++;
+	line = malloc((len + 2) * sizeof(char));
+	if (!line)
+		return (NULL);
+	while (i <= len)
 	{
-		free_node(node);
-		free(line);
-		node = NULL;
-		return (NULL);
+		line[i] = global_buffer[i];
+		i++;
 	}
+	line[i] = '\0';
 	return (line);
 }
 
-//read file and add the content to buffer
-void	read_add_to_node(int fd, t_list_char **node)
+static char	*join_n_free(char *global_buffer, char *local_buffer)
+{
+	size_t	len_global;
+	size_t	len_local;
+	char	*appended;
+	size_t	i;
+	size_t	j;
+
+	if (!global_buffer || !local_buffer)
+		return (NULL);
+	len_global = ft_strlen_int(global_buffer);
+	len_local = ft_strlen_int(local_buffer);
+	appended = malloc((len_global + len_local + 1) * sizeof(char));
+	if (!appended)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (j < len_global)
+		appended[i++] = global_buffer[j++];
+	j = 0;
+	while (j < len_local)
+		appended[i++] = local_buffer[j++];
+	appended[i] = '\0';
+	free(global_buffer);
+	return (appended);
+}
+
+static char	*read_buffsize(int fd, char *global_buffer)
 {
 	char	*buffer;
-	ssize_t	byteread;
+	int		bytes_rd;
 
-	byteread = 1;
-	while (!ft_new_line(*node) && byteread != 0)
+	if (global_buffer == NULL)
+		global_buffer = calloc(1, sizeof(char));
+	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!buffer)
+		return (NULL);
+	bytes_rd = 1;
+	while (bytes_rd > 0)
 	{
-		buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-		if (buffer == NULL)
-			return ;
-		byteread = (int)read(fd, buffer, BUFFER_SIZE);
-		if (*node == NULL && byteread <= 0)
+		bytes_rd = read(fd, buffer, BUFFER_SIZE);
+		if (bytes_rd == -1 || (bytes_rd == 0 && global_buffer == NULL))
 		{
-			byteread = 0;
+			free(global_buffer);
 			free(buffer);
-			free_node(*node);
-			return ;
+			return (NULL);
 		}
-		buffer[byteread] = '\0';
-		add_to_node(node, buffer, byteread);
-		free(buffer);
+		buffer[bytes_rd] = '\0';
+		global_buffer = join_n_free(global_buffer, buffer);
+		if (ft_isonstr(global_buffer, '\n') == true)
+			break ;
 	}
+	free(buffer);
+	return (global_buffer);
 }
 
-//add whats in my buffer into last nod
-void	add_to_node(t_list_char **node, char *buffer, int byteread)
+char	*get_next_line(int fd)
 {
-	int			i;
-	t_list_char	*lastnode;
-	t_list_char	*newnode;
+	static char	*global_buffer[FOPEN_MAX];
+	char		*line;
 
-	newnode = malloc(sizeof(t_list_char));
-	if (newnode == NULL)
-		return ;
-	newnode->next = NULL;
-	newnode->cont = malloc(sizeof(char) * (byteread + 1));
-	if (newnode->cont == NULL)
-		return ;
-	i = 0;
-	while (buffer[i] && i < byteread)
-	{
-		newnode->cont[i] = buffer[i];
-		i++;
-	}
-	newnode->cont[i] = '\0';
-	if (*node == NULL)
-	{
-		*node = newnode;
-		return ;
-	}
-	lastnode = ft_find_last_node(*node);
-	lastnode->next = newnode;
-}
-
-//copy char from node and store them in line
-void	read_line(t_list_char *node, char **line)
-{
-	int	i;
-	int	j;
-
-	if (node == NULL)
-		return ;
-	create_line(line, node);
-	if (*line == NULL)
-		return ;
-	j = 0;
-	while (node)
-	{
-		i = 0;
-		while (node->cont[i])
-		{
-			if (node->cont[i] == '\n')
-			{
-				(*line)[j++] = node->cont[i];
-				break ;
-			}
-			(*line)[j++] = node->cont[i++];
-		}
-		node = node->next;
-	}
-	(*line)[j] = '\0';
-}
-
-//clean already read characteres, keep the unread char
-int	clean_node(t_list_char **node, int i, int j)
-{
-	t_list_char	*last;
-	t_list_char	*temp;
-
-	if (node == NULL)
-		return (0);
-	temp = malloc(sizeof(t_list_char));
-	if (temp == NULL)
-		return (0);
-	last = ft_find_last_node(*node);
-	while (last->cont[i] && last->cont[i] != '\n')
-		i++;
-	if (last->cont[i] == '\n')
-		i++;
-	temp->cont = malloc(sizeof(char) * ((ft_strlen_int(last->cont) - i) + 1));
-	if (temp->cont == NULL)
-	{
-		free(temp);
-		return (0);
-	}
-	while (last->cont[i])
-		temp->cont[j++] = last->cont[i++];
-	temp->cont[j] = '\0';
-	free_node(*node);
-	*node = temp;
-	return (1);
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd > FOPEN_MAX)
+		return (NULL);
+	global_buffer[fd] = read_buffsize(fd, global_buffer[fd]);
+	if (!global_buffer[fd])
+		return (NULL);
+	line = get_line(global_buffer[fd]);
+	global_buffer[fd] = clean_printed(global_buffer[fd]);
+	return (line);
 }
